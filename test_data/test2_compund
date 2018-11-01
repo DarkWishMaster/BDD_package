@@ -1,0 +1,16 @@
+[var_order]
+x1 x2 x3 x4 x5 x6
+
+[var_order]
+x7 x8 x9 x10
+
+[sub_expression]
+s1
+x1*x2 + !x3*(x4 + x5) + !(x5 * x6)
+
+[sub_expression]
+s2
+x1*x7 + x8 + !x9*!x10
+
+[evaluate]
+s1 + !s2*(s1 + s3)
