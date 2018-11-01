@@ -12,13 +12,14 @@ using token_type = token_reader::token_type;
 
 using namespace std;
 
-
-
 class bool_parser
 {
 
 public:
 
+	/* Parses a boolean expression using Shunting-yard algorithm
+	 * and returns it into a reverse polish notation (stored in a list)
+	 */
 	bool_expr_rpn parse(string bool_expr)
 	{
 		token_reader tr(bool_expr);
@@ -29,7 +30,6 @@ public:
 		while (tr.has_tokens())
 		{
 			token_reader::token token = tr.next_token();
-			cout << "Token read " << token.name << endl;
 			if (token.type == token_type::SYMBOL)
 			{
 				b_expr.add_token(token);
@@ -58,12 +58,16 @@ public:
 					b_expr.add_token(op_stack.top());
 					op_stack.pop();
 				}
-				cout << "Stack size : " << op_stack.size() << endl;
 				op_stack.pop();
 			}
+			else if (token.type == token_type::UNKNOWN)
+			{
+				// TBD: error
+			}
 
-			cout << b_expr;
 		}
+
+		// TBD: check if parentheses match
 
 		while (!op_stack.empty())
 		{
