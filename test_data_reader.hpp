@@ -49,11 +49,9 @@ public:
 		{
 			while (getline(test_file, line))
 			{
-				cout << "Got line " << line << endl;
 				if (line.find("[var_order]") != string::npos)
 				{
 					getline(test_file, line);
-					cout << "Got subexpr " << line << endl;
 					istringstream iss(line);
 					string word;
 					while(iss >> word) {
@@ -65,15 +63,17 @@ public:
 				{
 					sub_expr sub;;
 					getline(test_file, sub.name);
-					cout << "Got name " << sub.name << endl;
+					if (sub.name[sub.name.length() - 1] == '\r')
+					{
+						sub.name = sub.name.substr(0, sub.name.length() - 1);
+					}
+
 					getline(test_file, sub.expr);
-					cout << "Got expr " << sub.expr << endl;
 					td.sub_expressions.push_back(sub);
 				}
 				else if (line.find("[evaluate]") != string::npos )
 				{
 					getline(test_file, td.evaluate);
-					cout << "Got eval " << td.evaluate << endl;
 				}
 			}
 

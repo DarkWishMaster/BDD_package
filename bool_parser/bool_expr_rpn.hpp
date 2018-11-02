@@ -13,9 +13,7 @@ private:
 	unsigned int var_num;
 	deque<token_reader::token> data;
 
-
 public:
-
 
 	bool evaluate(bool input[])
 	{
@@ -37,6 +35,12 @@ public:
 
 		return out;
 	}
+
+	deque<token_reader::token>& get_tokens()
+	{
+		return data;
+	}
+
 
 
 

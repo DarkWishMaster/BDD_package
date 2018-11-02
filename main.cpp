@@ -2,6 +2,7 @@
 #include <token_reader.hpp>
 #include <test_data_reader.hpp>
 #include <bdd.hpp>
+#include <test_bdd.hpp>
 
 using namespace std;
 
@@ -29,24 +30,33 @@ int main(int argc, char **argv) {
 //	cout << td.evaluate << endl;
 //	cout << bp.parse(td.evaluate);
 
-	bdd::bdd_init(2);
-	bdd* x = new bdd();
-	x->index = 0;
-	x->low = &bdd::bdd_zero;
-	x->high = &bdd::bdd_one;
-	bdd* y = new bdd();
-	y->index = 1;
-	y->low = &bdd::bdd_zero;
-	y->high = &bdd::bdd_one;
+//	bdd::bdd_init(3);
+//
+//	bdd  a(0);
+//	bdd  b(1);
+//	bdd  c(2);
+//
+//
+//	cout << "ZERO : " << bdd::bdd_zero << "ONE : " << bdd::bdd_one << endl;
+//
+//	cout << "computing ac" << endl;
+//	bdd ac = bdd::ite(a,c, bdd::bdd_zero);
+//	cout << "computing bc" << endl;
+//	bdd bc = bdd::ite(b,c, bdd::bdd_zero);
+//	cout << "computing r" << endl;
+//	bdd r  = bdd::ite(ac, bdd::bdd_one, bc);
+//
+//	cout << "R" << endl << r;
+//	cout << "RL" << endl << r.get_low();
+//	cout << "RH" << endl << r.get_high();
+//
+//	cout << "RLL" << endl << r.get_low().get_low();
+//	cout << "RLH" << endl << r.get_low().get_high();
+//	cout << "RHL" << endl << r.get_high().get_low();
+//	cout << "RHH" << endl << r.get_high().get_high();
 
-	cout << &bdd::bdd_zero << " " << &bdd::bdd_one << endl;
-
-	bdd* r = bdd::ite(x, y, &bdd::bdd_zero);
-
-	cout << endl << "R" << endl;
-	cout << *r;
-	cout << *r->low;
-	cout << *r->high;
-
+	test2();
+//	test3();
+//	test4();
 
 }

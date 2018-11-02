@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cstdint>
 #include <unordered_map>
+#include <bdd_node.hpp>
+#include <hash_table.hpp>
 
 using namespace std;
 
@@ -12,10 +14,11 @@ class bdd
 {
 
 public:
-	uint32_t index;
-	bdd* low;
-	bdd* high;
+	bdd_node_ptr root;
 
+	static hash_table unique_table;
+
+public:
 	// leaf nodes
 	static bdd bdd_one;
 	static bdd bdd_zero;
@@ -23,97 +26,85 @@ public:
 public:
 	enum class bdd_op {NOT, AND, OR};
 
+	bdd()
+	{
+		this->root = nullptr;
+	}
+
+	bdd(uint32_t index)
+	{
+		this->root = unique_table.find_or_add_unique(index, bdd_zero.root, bdd_one.root);
+	}
+
+	bdd get_low()
+	{
+		bdd b;
+		b.root = this->root->low;
+		return b;
+	}
+
+	bdd get_high()
+	{
+		bdd b;
+		b.root = this->root->high;
+		return b;
+	}
+
 	friend inline bool operator==(const bdd& f, const bdd& g)
 	{
-	    return (f.index == g.index && f.low == g.low && f.high == g.high);
+	    return (f.root == g.root);
 	}
 
 	bdd& operator=(const bdd& g)
 	{
-		this->index = g.index;
-		this->low   = g.low;
-		this->high  = g.high;
-
+		this->root = g.root;
 		return *this;
 	}
 
 	static void bdd_init(unsigned int num_var)
 	{
-		bdd_zero.index = num_var;
-		bdd_zero.low = bdd_zero.high = nullptr;
-
-		bdd_one.index  = num_var + 1;
-		bdd_one.low = bdd_one.high = nullptr;
+		bdd_zero.root = unique_table.find_or_add_unique(num_var,     nullptr, nullptr);
+		bdd_one.root  = unique_table.find_or_add_unique(num_var + 1, nullptr, nullptr);
 	}
 
-	static bdd bdd_and(bdd& f, bdd& g);
-	static bdd bdd_not(bdd& f, bdd& g);
-	static bdd bdd_or(bdd& f, bdd& g);
+	static void bdd_exit()
+	{
+		unique_table.clear();
+		bdd_zero.root = nullptr;
+		bdd_one.root  = nullptr;
+	}
 
 	static bdd bdd_apply(bdd& f, bdd& g, bdd_op op);
 
-	static bdd* ite(bdd* f,  bdd* g, bdd* h);
+	static bdd bdd_not(bdd f);
+	static bdd bdd_and(bdd f, bdd g);
+	static bdd bdd_or(bdd f, bdd g);
+
+	static bdd_node_ptr ite(bdd_node_ptr f,  bdd_node_ptr g, bdd_node_ptr h);
+	static bdd ite(bdd f,  bdd g, bdd h);
 
 	friend ostream & operator << (ostream &out, const bdd &f)
 	{
-		cout << &f << " " << f.index << " " << f.low << " " << f.high << endl;
+		cout << f.root << " " << f.root->index << " " <<
+				f.root->low << " " << f.root->high << endl;
 		return out;
 	}
 
-
+	void print()
+	{
+		cout << *this;
+		print_dfs("L", this->root->low);
+		print_dfs("H", this->root->high);
+	}
 
 private:
-
-	/*
-	 * The unique tables maps triplets of (v, low, h) to F
-	 * where v    - variable index (x0, x1 ... xn)
-	 *       low  - pointer to low bdd
-	 *       high - pointer to high bdd
-	 *       F    - a function i.e a pointer to a BDD node in memory
-	 *       		with the (v, low, high) values
-	 */
-
-
-	struct table_key
+	void print_dfs(string path, bdd_node_ptr r)
 	{
-		uint32_t index;
-		bdd*     low;
-		bdd*     high;
-
-		bool operator==(const table_key& k) const
+		if (r != nullptr)
 		{
-			return (index == k.index && low == k.low && high == k.high);
-		}
-	};
-
-	 struct table_hash
-	  {
-		std::size_t operator()(const table_key& k) const
-		{
-		  return std::hash<uint32_t>()(k.index);
-		}
-	  };
-
-	static unordered_map<const table_key, bdd*, table_hash> unique_table;
-
-
-	static bdd* find_or_add_unique(uint32_t v, bdd* low, bdd* high)
-	{
-		table_key key{v, low, high};
-		auto element = unique_table.find(key);
-
-		if (element == unique_table.end())
-		{
-			bdd* node = new bdd();
-			node->index = v;
-			node->low   = low;
-			node->high  = high;
-			unique_table.insert(std::pair<const table_key, bdd*>(key, node));
-			return node;
-		}
-		else
-		{
-			return element->second;
+			cout << path << " " << r << " " << r->index << " " << r->low << " " << r->high << endl;
+			print_dfs(path+"L", r->low);
+			print_dfs(path+"H", r->high);
 		}
 	}
 

@@ -20,7 +20,7 @@ public:
 	/* Parses a boolean expression using Shunting-yard algorithm
 	 * and returns it into a reverse polish notation (stored in a list)
 	 */
-	bool_expr_rpn parse(string bool_expr)
+	static bool_expr_rpn parse(string bool_expr)
 	{
 		token_reader tr(bool_expr);
 		bool_expr_rpn b_expr;
