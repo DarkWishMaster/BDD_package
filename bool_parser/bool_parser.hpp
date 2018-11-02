@@ -62,26 +62,27 @@ public:
 			}
 			else if (token.type == token_type::UNKNOWN)
 			{
-				// TBD: error
+				cerr << "Unknown token '" + token.name +
+					   "' while parsing the expression:\r\n" + bool_expr << endl;
+
 			}
 
 		}
 
-		// TBD: check if parentheses match
 
 		while (!op_stack.empty())
 		{
+			if (op_stack.top().type == token_type::LEFT_BRACKET ||
+				op_stack.top().type == token_type::RIGHT_BRACKET)
+			{
+				cerr << "Parentheses mismatch in the expression:\r\n" + bool_expr << endl;
+			}
 			b_expr.add_token(op_stack.top());
 			op_stack.pop();
 		}
 
 		return b_expr;
 	}
-
-
-private:
-
-
 
 
 };

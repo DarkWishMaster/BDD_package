@@ -1,22 +1,22 @@
 #include <iostream>
 #include <token_reader.hpp>
-#include <test_data_reader.hpp>
 #include <bdd.hpp>
-#include <test_bdd.hpp>
+#include <txt_test_reader.hpp>
 
 using namespace std;
 
 #include <bool_parser.hpp>
+#include <test_input.hpp>
 
 int main(int argc, char **argv) {
 
 //	bool_parser bp;
 //
-//	bool_expr_rpn expr = bp.parse("!(x1*x2) + x3*!(x4 * !(x5*x2 + !x1*(!x6 + x3))) + x6");
+//	bool_expr_rpn expr = bp.parse("!(x1*x2) + x3*!((x4 * !(x5*x2 + !x1*(!x6 + x3))) + x6");
 //
 //	cout << expr;
 //
-//	test_data td = test_data_reader::read("..\\test_data\\test2_compund.txt");
+//	txt_data td = txt_data_reader::read("..\\txt_data\\test2_compund.txt");
 //
 //	for (auto it=td.var_order.begin(); it!=td.var_order.end(); ++it)
 //	    std::cout << it->first << " => " << it->second << '\n';
@@ -55,8 +55,8 @@ int main(int argc, char **argv) {
 //	cout << "RHL" << endl << r.get_high().get_low();
 //	cout << "RHH" << endl << r.get_high().get_high();
 
-	test2();
+//	test2();
 //	test3();
 //	test4();
-
+	bdd_from_txt("..\\test_data\\test2_compund.txt").print();
 }

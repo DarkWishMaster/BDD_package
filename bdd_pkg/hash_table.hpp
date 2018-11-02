@@ -19,8 +19,8 @@ class hash_table
 	struct table_key
 	{
 		uint32_t     index;
-		bdd_node_ptr low;
-		bdd_node_ptr high;
+		bdd_node* low;
+		bdd_node* high;
 
 		bool operator==(const table_key& k) const
 		{
@@ -36,29 +36,25 @@ class hash_table
 		}
 	  };
 
-	unordered_map<const table_key, bdd_node_ptr, table_hash> table;
+	unordered_map<const table_key, bdd_node*, table_hash> table;
 
 public:
-	bdd_node_ptr find_or_add_unique(uint32_t v, bdd_node_ptr low, bdd_node_ptr high)
+	bdd_node* find_or_add_unique(uint32_t v, bdd_node* low, bdd_node* high)
 	{
 		table_key key{v, low, high};
 		auto element = table.find(key);
 
 		if (element == table.end())
 		{
-//			cout << "Key not found, adding: " << endl;
-//			cout << v << " " << low << " " << high << endl;
-			bdd_node_ptr node = new bdd_node();
+			bdd_node* node = new bdd_node();
 			node->index = v;
 			node->low   = low;
 			node->high  = high;
-			table.insert(std::pair<const table_key, bdd_node_ptr>(key, node));
+			table.insert(std::pair<const table_key, bdd_node*>(key, node));
 			return node;
 		}
 		else
 		{
-//			cout << "Key found, returning: " << endl;
-//			cout << v << " " << low << " " << high << endl;
 			return element->second;
 		}
 	}

@@ -3,13 +3,15 @@
 
 #include <cstdint>
 
+/* Represent a node of BDD with associated
+ * variable index and pointers to it's low and high BDDs
+ * (v, LO, HI)
+ */
 typedef struct bdd_node_s
 {
 	uint32_t  		   index;
 	struct bdd_node_s* low;
 	struct bdd_node_s* high;
 } bdd_node;
-
-typedef bdd_node* bdd_node_ptr;
 
 #endif /* BDD_PKG_BDD_NODE_HPP_ */

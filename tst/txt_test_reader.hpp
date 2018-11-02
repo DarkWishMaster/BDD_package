@@ -1,5 +1,5 @@
-#ifndef TEST_DATA_READER_HPP_
-#define TEST_DATA_READER_HPP_
+#ifndef txt_data_READER_HPP_
+#define txt_data_READER_HPP_
 
 #include <iostream>
 #include <fstream>
@@ -7,6 +7,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <cstdint>
 
 using namespace std;
 
@@ -17,12 +18,12 @@ typedef struct
 	string expr;
 } sub_expr;
 
-class test_data
+class txt_data
 {
 public:
-	unsigned int		  	  var_num;
-	map<string, unsigned int> var_order;
-	vector<sub_expr> 		  sub_expressions;
+	uint32_t		  	  var_num;
+	map<string, uint32_t> var_order;
+	vector<sub_expr> 	  sub_expressions;
 	string evaluate;
 };
 
@@ -32,17 +33,16 @@ public:
  * Reads the test file, saves the variable order,
  * provides a list of boolean subexpressions as bool_expr_rpn (in reverse polish notation)
  */
-class test_data_reader
+class txt_test_reader
 {
 
 public:
 
-	static test_data read(string file_path)
+	static txt_data read(string file_path)
 	{
-		test_data td;
+		txt_data td;
 		td.var_num = 0;
 
-		// TBD error detection mechanism
 		string line;
 		ifstream test_file (file_path);
 		if (test_file.is_open())
@@ -55,8 +55,14 @@ public:
 					istringstream iss(line);
 					string word;
 					while(iss >> word) {
-						// TBD check for duplicates
-						td.var_order.insert(pair<string, unsigned int>(word, td.var_num++));
+						if (td.var_order.find(word) == td.var_order.end())
+						{
+							td.var_order.insert(pair<string, uint32_t>(word, td.var_num++));
+						}
+						else
+						{
+							cerr << "Duplicate variable " << word << "in [var_order]" << endl;
+						}
 					}
 				}
 				else if (line.find("[sub_expression]") != string::npos)
@@ -79,7 +85,10 @@ public:
 
 			test_file.close();
 		}
-		else cout << "Unable to open file";
+		else
+		{
+			cerr << "Unable to open file " + file_path << endl;
+		}
 
 		return td;
 	}
@@ -89,4 +98,4 @@ public:
 
 
 
-#endif /* TEST_DATA_READER_HPP_ */
+#endif /* txt_data_READER_HPP_ */
