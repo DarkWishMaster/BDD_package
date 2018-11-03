@@ -92,3 +92,4 @@ static bdd evaluate_txt_data(txt_data td)
 
 	return result;
 }
+

@@ -14,4 +14,5 @@ using namespace std;
 extern bdd bdd_from_txt(string file_path);
 
 
+
 #endif /* TST_TEST_INPUT_HPP_ */
