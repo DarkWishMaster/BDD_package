@@ -2,10 +2,12 @@
 #define BDD_HPP_
 
 #include <iostream>
+#include <iomanip>
 #include <cstdint>
 #include <unordered_map>
 #include <bdd_node.hpp>
 #include <hash_table.hpp>
+#include <unordered_set>
 
 using namespace std;
 
@@ -13,100 +15,51 @@ using namespace std;
 class bdd
 {
 
-public:
-	bdd_node_ptr root;
+private:
+	bdd_node* root;
 
 	static hash_table unique_table;
+	static uint32_t num_var;
+	static unordered_map<uint32_t, string>* map_var;
 
 public:
+
 	// leaf nodes
 	static bdd bdd_one;
 	static bdd bdd_zero;
 
-public:
 	enum class bdd_op {NOT, AND, OR};
 
-	bdd()
-	{
-		this->root = nullptr;
-	}
+	bdd();
+	bdd(uint32_t index);
 
-	bdd(uint32_t index)
-	{
-		this->root = unique_table.find_or_add_unique(index, bdd_zero.root, bdd_one.root);
-	}
+	bdd_node* get_root();
+	uint32_t  get_index();
+	string    get_var();
 
-	bdd get_low()
-	{
-		bdd b;
-		b.root = this->root->low;
-		return b;
-	}
+	bdd get_low();
+	bdd get_high();
 
-	bdd get_high()
-	{
-		bdd b;
-		b.root = this->root->high;
-		return b;
-	}
+	bool empty();
 
-	friend inline bool operator==(const bdd& f, const bdd& g)
-	{
-	    return (f.root == g.root);
-	}
+	void print();
 
-	bdd& operator=(const bdd& g)
-	{
-		this->root = g.root;
-		return *this;
-	}
+	friend inline bool operator==(const bdd& f, const bdd& g);
+	bdd& operator=(const bdd& g);
 
-	static void bdd_init(unsigned int num_var)
-	{
-		bdd_zero.root = unique_table.find_or_add_unique(num_var,     nullptr, nullptr);
-		bdd_one.root  = unique_table.find_or_add_unique(num_var + 1, nullptr, nullptr);
-	}
 
-	static void bdd_exit()
-	{
-		unique_table.clear();
-		bdd_zero.root = nullptr;
-		bdd_one.root  = nullptr;
-	}
-
-	static bdd bdd_apply(bdd& f, bdd& g, bdd_op op);
-
+	static void bdd_init(uint32_t num_var, unordered_map<string, uint32_t>& var_order);
+	static void bdd_exit();
 	static bdd bdd_not(bdd f);
 	static bdd bdd_and(bdd f, bdd g);
 	static bdd bdd_or(bdd f, bdd g);
-
-	static bdd_node_ptr ite(bdd_node_ptr f,  bdd_node_ptr g, bdd_node_ptr h);
 	static bdd ite(bdd f,  bdd g, bdd h);
+	static string get_var(bdd_node* node);
 
-	friend ostream & operator << (ostream &out, const bdd &f)
-	{
-		cout << f.root << " " << f.root->index << " " <<
-				f.root->low << " " << f.root->high << endl;
-		return out;
-	}
 
-	void print()
-	{
-		cout << *this;
-		print_dfs("L", this->root->low);
-		print_dfs("H", this->root->high);
-	}
 
 private:
-	void print_dfs(string path, bdd_node_ptr r)
-	{
-		if (r != nullptr)
-		{
-			cout << path << " " << r << " " << r->index << " " << r->low << " " << r->high << endl;
-			print_dfs(path+"L", r->low);
-			print_dfs(path+"H", r->high);
-		}
-	}
+	static bdd_node* ite(bdd_node* f,  bdd_node* g, bdd_node* h);
 
 
 };

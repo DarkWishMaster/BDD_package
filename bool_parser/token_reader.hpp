@@ -35,8 +35,11 @@ public:
 
 		if (has_tokens())
 		{
-			/* skip spaces */
-			while (current_char < expression.length() && is_space(expression[current_char]))
+			/* skip spaces and new line characters */
+			while (current_char < expression.length() &&
+					(expression[current_char] == ' ' ||
+					 expression[current_char] == '\r' ||
+					 expression[current_char] == '\n'))
 			{
 				current_char++;
 			}
@@ -54,7 +57,7 @@ public:
 			}
 			else
 			{
-				switch(expression[current_char++])
+				switch(expression[current_char])
 				{
 					case '!':
 					case '~':
@@ -84,8 +87,10 @@ public:
 						break;
 					default:
 						t.type = token_type::UNKNOWN;
-						t.name = "UNK";
+						t.name = expression[current_char];
 				}
+
+				current_char++;
 			}
 		}
 
@@ -96,7 +101,13 @@ public:
 	{
 		unsigned int i = current_char;
 
-		while (i < expression.length() && expression[i] == ' ') i++;
+		while (i < expression.length() &&
+				(expression[i] == ' '  ||
+				 expression[i] == '\r' ||
+				 expression[i] == '\n'))
+		{
+			i++;
+		}
 
 		return i < expression.length();
 	}
@@ -127,10 +138,6 @@ private:
 		return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
 	}
 
-	bool is_space(char c)
-	{
-		return c == ' ';
-	}
 
 	bool is_number(char c)
 	{

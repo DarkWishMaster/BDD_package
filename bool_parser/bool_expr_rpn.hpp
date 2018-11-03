@@ -3,6 +3,7 @@
 
 #include <deque>
 #include <token_reader.hpp>
+#include <cstdint>
 
 using namespace std;
 class bool_expr_rpn
@@ -10,10 +11,11 @@ class bool_expr_rpn
 
 
 private:
-	unsigned int var_num;
+	uint32_t var_num;
 	deque<token_reader::token> data;
 
 public:
+
 
 	bool evaluate(bool input[])
 	{
@@ -40,9 +42,6 @@ public:
 	{
 		return data;
 	}
-
-
-
 
 };
 
