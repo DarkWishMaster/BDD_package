@@ -16,12 +16,6 @@ private:
 
 public:
 
-
-	bool evaluate(bool input[])
-	{
-		return true;
-	}
-
 	void add_token(token_reader::token token)
 	{
 		data.push_back(token);

@@ -11,7 +11,7 @@ class token_reader
 
 public:
 
-	enum class bool_op    {NOT, AND, OR};
+	enum class bool_op    {NOT, AND, OR, IMP, XOR, EQ};
 	enum class token_type {SYMBOL, OPERATOR, LEFT_BRACKET, RIGHT_BRACKET, UNKNOWN};
 
 	class token
@@ -44,6 +44,8 @@ public:
 				current_char++;
 			}
 
+//			cout << "Current char " << expression[current_char] << endl;
+
 			if (is_character(expression[current_char]))
 			{
 				t.name = "";
@@ -55,8 +57,35 @@ public:
 					t.name += expression[current_char++];
 				}
 			}
+			else if (expression[current_char] == '1' || expression[current_char] == '0')
+			{
+				t.name = expression[current_char++];
+				t.type = token_type::SYMBOL;
+			}
+			else if ((current_char + 1) < expression.length() &&
+					expression[current_char] == '=' &&
+					expression[current_char + 1] == '>')
+			{
+//					cout << "Implication " << endl;
+
+					t.type = token_type::OPERATOR;
+					t.op   = bool_op::IMP;
+					t.name = "=>";
+					current_char += 2;
+			} else if ((current_char + 2) < expression.length() &&
+					expression[current_char] == '<'     &&
+					expression[current_char + 1] == '=' &&
+					expression[current_char + 2] == '>')
+			{
+//				cout << "Equivalence " << endl;
+				t.type = token_type::OPERATOR;
+				t.op   = bool_op::EQ;
+				t.name = "<=>";
+				current_char += 3;
+			}
 			else
 			{
+
 				switch(expression[current_char])
 				{
 					case '!':
@@ -76,6 +105,11 @@ public:
 						t.type = token_type::OPERATOR;
 						t.op   = bool_op::OR;
 						t.name = "+";
+						break;
+					case '^':
+						t.type = token_type::OPERATOR;
+						t.op   = bool_op::XOR;
+						t.name = "^";
 						break;
 					case '(':
 						t.type = token_type::LEFT_BRACKET;
@@ -117,10 +151,16 @@ public:
 		switch (op)
 		{
 			case bool_op::NOT:
-				return 3;
+				return 6;
 			case bool_op::AND:
-				return 2;
+				return 5;
 			case bool_op::OR:
+				return 4;
+			case bool_op::IMP:
+				return 3;
+			case bool_op::XOR:
+				return 2;
+			case bool_op::EQ:
 				return 1;
 			default:
 				return 0;

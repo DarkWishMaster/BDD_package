@@ -180,11 +180,23 @@ bdd bdd::bdd_or(bdd f, bdd g)
 	return ite(f, bdd::bdd_one, g);
 }
 
-
-inline bool operator==(const bdd& f, const bdd& g)
+bdd bdd::bdd_imp(bdd f, bdd g)
 {
-	return (f.root == g.root);
+	return ite(f, g, bdd::bdd_one);
 }
+
+bdd bdd::bdd_xor(bdd f, bdd g)
+{
+	return ite(f, bdd_not(g), g);
+}
+
+bdd bdd::bdd_eq(bdd f, bdd g)
+{
+	return ite(f, g, bdd_not(g));
+}
+
+
+
 
 bdd& bdd::operator=(const bdd& g)
 {
@@ -207,7 +219,7 @@ static void print_dfs(string path, bdd_node* r, unordered_set<bdd_node*>& visite
 
 	if (r != nullptr && !is_visited)
 	{
-		cout << std::setw(8) << path << " " << r << " " << r->index << " " << r->low << " " << r->high << endl;
+		cout << std::setw(8) << path << " " << r << " " << bdd::get_var(r) << " " << r->low << " " << r->high << endl;
 		print_dfs(path + "L", r->low,  visited);
 		print_dfs(path + "H", r->high, visited);
 	}

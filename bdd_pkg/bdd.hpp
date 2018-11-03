@@ -50,9 +50,17 @@ public:
 
 	static void bdd_init(uint32_t num_var, unordered_map<string, uint32_t>& var_order);
 	static void bdd_exit();
+
+
 	static bdd bdd_not(bdd f);
 	static bdd bdd_and(bdd f, bdd g);
 	static bdd bdd_or(bdd f, bdd g);
+	static bdd bdd_imp(bdd f, bdd g);
+	static bdd bdd_xor(bdd f, bdd g);
+	static bdd bdd_eq(bdd f, bdd g);
+
+
+
 	static bdd ite(bdd f,  bdd g, bdd h);
 	static string get_var(bdd_node* node);
 
@@ -64,6 +72,10 @@ private:
 
 };
 
+inline bool operator==(const bdd& f, const bdd& g)
+{
+	return (f.root == g.root);
+}
 
 
 #endif /* BDD_HPP_ */
