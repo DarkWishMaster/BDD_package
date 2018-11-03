@@ -7,7 +7,7 @@ static bdd evaluate_txt_data(txt_data td);
 bdd bdd_from_txt(string file_path)
 {
 	txt_data td = txt_test_reader::read(file_path);
-	bdd::bdd_init(td.var_num);
+	bdd::bdd_init(td.var_num, td.var_order);
 	return evaluate_txt_data(td);
 }
 

@@ -8,6 +8,8 @@ using namespace std;
 bdd bdd::bdd_one;
 bdd bdd::bdd_zero;
 hash_table bdd::unique_table;
+uint32_t bdd::num_var;
+unordered_map<uint32_t, string>* bdd::map_var;
 
 
 bdd::bdd()
@@ -31,6 +33,18 @@ uint32_t bdd::get_index()
 	return this->root->index;
 }
 
+string bdd::get_var()
+{
+	string name = map_var->at(this->root->index);
+	return name;
+}
+
+string bdd::get_var(bdd_node* node)
+{
+	string name = map_var->at(node->index);
+	return name;
+}
+
 bdd bdd::get_low()
 {
 	bdd b;
@@ -50,15 +64,26 @@ bool bdd::empty()
 	return this->root == nullptr;
 }
 
-void bdd::bdd_init(unsigned int num_var)
+void bdd::bdd_init(uint32_t num_var, unordered_map<string, uint32_t>& var_order)
 {
 	bdd_zero.root = unique_table.find_or_add_unique(num_var,     nullptr, nullptr);
 	bdd_one.root  = unique_table.find_or_add_unique(num_var + 1, nullptr, nullptr);
+
+	map_var = new unordered_map<uint32_t, string>();
+	for (auto elem : var_order)
+	{
+		map_var->insert(pair<uint32_t, string>(elem.second, elem.first));
+	}
+	map_var->insert(pair<uint32_t, string>(num_var, "0"));
+	map_var->insert(pair<uint32_t, string>(num_var + 1, "1"));
+
 }
 
 void bdd::bdd_exit()
 {
 	unique_table.clear();
+	delete map_var;
+	num_var = 0;
 	bdd_zero.root = nullptr;
 	bdd_one.root  = nullptr;
 }

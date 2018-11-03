@@ -17,7 +17,10 @@ class bdd
 
 private:
 	bdd_node* root;
+
 	static hash_table unique_table;
+	static uint32_t num_var;
+	static unordered_map<uint32_t, string>* map_var;
 
 public:
 
@@ -32,24 +35,28 @@ public:
 
 	bdd_node* get_root();
 	uint32_t  get_index();
+	string    get_var();
 
 	bdd get_low();
 	bdd get_high();
 
 	bool empty();
 
+	void print();
+
 	friend inline bool operator==(const bdd& f, const bdd& g);
 	bdd& operator=(const bdd& g);
 
 
-	static void bdd_init(unsigned int num_var);
+	static void bdd_init(uint32_t num_var, unordered_map<string, uint32_t>& var_order);
 	static void bdd_exit();
 	static bdd bdd_not(bdd f);
 	static bdd bdd_and(bdd f, bdd g);
 	static bdd bdd_or(bdd f, bdd g);
 	static bdd ite(bdd f,  bdd g, bdd h);
+	static string get_var(bdd_node* node);
 
-	void print();
+
 
 private:
 	static bdd_node* ite(bdd_node* f,  bdd_node* g, bdd_node* h);

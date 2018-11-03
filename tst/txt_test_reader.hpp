@@ -5,7 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <cstdint>
 
@@ -21,9 +21,9 @@ typedef struct
 class txt_data
 {
 public:
-	uint32_t		  	  var_num;
-	map<string, uint32_t> var_order;
-	vector<sub_expr> 	  sub_expressions;
+	uint32_t		  	  			var_num;
+	unordered_map<string, uint32_t> var_order;
+	vector<sub_expr> 	  			sub_expressions;
 	string evaluate;
 };
 
