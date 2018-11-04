@@ -222,6 +222,17 @@ TEST_CASE("txt/test10.txt Check time for bad variable ordering")
 	bdd::bdd_exit();
 }
 
+TEST_CASE("txt/test11.txt Check time for bad variable ordering")
+{
+	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test11.txt");
+
+	REQUIRE(F.empty() != true);
+
+
+	cout << setw(20) << "txt/test11.txt  ";
+	bdd::print_stats();
+	bdd::bdd_exit();
+}
 
 
 

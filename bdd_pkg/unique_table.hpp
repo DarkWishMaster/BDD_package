@@ -36,7 +36,11 @@ class unique_table
 	 {
 		std::size_t operator()(const table_key& k) const
 		{
-		  return std::hash<uint32_t>()(k.index);
+			std::size_t h;
+			h = std::hash<uint32_t>()(k.index);
+			h = (h ^ std::hash<bdd_node*>()(k.low) << 1) >> 1;
+			h = (h ^ std::hash<bdd_node*>()(k.high) << 1) >> 1;
+			return  h ;
 		}
 	  };
 
@@ -67,6 +71,11 @@ public:
 	uint32_t get_size()
 	{
 		return table.size();
+	}
+
+	float get_load_factor()
+	{
+		return table.load_factor();
 	}
 
 };
