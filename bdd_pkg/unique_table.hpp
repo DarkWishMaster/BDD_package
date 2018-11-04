@@ -2,8 +2,8 @@
 #include <unordered_map>
 #include <bdd_node.hpp>
 
-#ifndef BDD_PKG_unique_table_HPP_
-#define BDD_PKG_unique_table_HPP_
+#ifndef BDD_PKG_UNIQUE_TABLE_HPP_
+#define BDD_PKG_UNIQUE_TABLE_HPP_
 
 using namespace std;
 /*
@@ -81,4 +81,4 @@ public:
 };
 
 
-#endif /* BDD_PKG_unique_table_HPP_ */
+#endif /* BDD_PKG_UNIQUE_TABLE_HPP_ */

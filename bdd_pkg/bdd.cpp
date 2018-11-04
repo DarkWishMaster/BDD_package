@@ -13,6 +13,7 @@ bdd bdd::bdd_one;
 bdd bdd::bdd_zero;
 
 unique_table* bdd::unique_tb;
+computed_table* bdd::computed_tb;
 
 bdd_stats bdd::stats;
 
@@ -74,6 +75,7 @@ void bdd::bdd_init(uint32_t num_var, unordered_map<string, uint32_t>& var_order)
 
 	bdd::num_var  = num_var;
 
+	computed_tb   = new computed_table();
 	unique_tb     = new unique_table();
 	bdd_zero.root = unique_tb->find_or_add_unique(num_var,     nullptr, nullptr);
 	bdd_one.root  = unique_tb->find_or_add_unique(num_var + 1, nullptr, nullptr);
@@ -97,6 +99,7 @@ void bdd::bdd_exit()
 
 	bdd::reset_stats();
 
+	delete computed_tb;
 	delete unique_tb;
 	delete map_var;
 }
@@ -146,8 +149,13 @@ bdd bdd::ite(bdd f,  bdd g, bdd h)
 bdd_node* bdd::ite(bdd_node* f, bdd_node* g, bdd_node* h)
 {
 	bdd::stats.ite_calls++;
+	bdd_node* res =  computed_tb->get_entry(f, g, h);
 
-	if (f == bdd::bdd_one.root)
+	if (res != nullptr)
+	{
+		return res;
+	}
+	else if (f == bdd::bdd_one.root)
 	{
 		bdd::stats.ite_terminals++;
 		return g;
@@ -157,6 +165,7 @@ bdd_node* bdd::ite(bdd_node* f, bdd_node* g, bdd_node* h)
 		bdd::stats.ite_terminals++;
 		return h;
 	}
+
 	else
 	{
 		uint32_t v = min(min(f->index, g->index), h->index);
@@ -184,7 +193,9 @@ bdd_node* bdd::ite(bdd_node* f, bdd_node* g, bdd_node* h)
 		/* Don't create duplicate nodes if they already exists
 		 * (keeps bdd reduced and saves space)
 		 */
-		return bdd::unique_tb->find_or_add_unique(v, E, T);
+		res = bdd::unique_tb->find_or_add_unique(v, E, T);
+		computed_tb->add_entry(f, g, h, res);
+		return res;
 	}
 
 

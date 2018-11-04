@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <bdd_node.hpp>
 #include <unique_table.hpp>
+#include <computed_table.hpp>
 #include <unordered_set>
 #include <chrono>
 
@@ -28,7 +29,8 @@ class bdd
 private:
 	bdd_node* root;
 
-	static unique_table* unique_tb;
+	static unique_table*   unique_tb;
+	static computed_table* computed_tb;
 	static uint32_t num_var;
 	static unordered_map<uint32_t, string>* map_var;
 
