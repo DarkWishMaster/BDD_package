@@ -2,16 +2,16 @@
 #include <test_input.hpp>
 #include <test_utils.hpp>
 #include <bdd.hpp>
+#include <timer.hpp>
 
 // TBD check number of satisfying assignments and their vector
 // TBD test_node pure 0 or pure 1 (no edges)
 
-TEST_CASE("Test 1. Simple expression")
+TEST_CASE("txt/test01.txt Simple expression")
 {
 	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test01.txt");
 
 	REQUIRE(F.empty() != true);
-
 
 	test_nodes expected;
 	expected.add_test_node("x1", "x3", "x2");
@@ -22,10 +22,12 @@ TEST_CASE("Test 1. Simple expression")
 
 	check_expected(F, expected);
 
+	cout << setw(20) << "txt/test01.txt  ";
+	bdd::print_stats();
 	bdd::bdd_exit();
 }
 
-TEST_CASE("Test 2. Complex expression")
+TEST_CASE("txt/test02.txt Complex expression")
 {
 	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test02.txt");
 
@@ -47,10 +49,12 @@ TEST_CASE("Test 2. Complex expression")
 
 	check_expected(F, expected);
 
+	cout << setw(20) << "txt/test02.txt  ";
+	bdd::print_stats();
 	bdd::bdd_exit();
 }
 
-TEST_CASE("Test 3. Bad variable ordering from")
+TEST_CASE("txt/test03.txt Bad variable ordering from")
 {
 	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test03.txt");
 
@@ -91,10 +95,12 @@ TEST_CASE("Test 3. Bad variable ordering from")
 
 	check_expected(F, expected);
 
+	cout << setw(20) << "txt/test03.txt  ";
+	bdd::print_stats();
 	bdd::bdd_exit();
 }
 
-TEST_CASE("Test 4. Same as Test 3 but with good variable ordering from")
+TEST_CASE("txt/test04.txt Same as Test 3 but with good variable ordering from")
 {
 	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test04.txt");
 
@@ -112,10 +118,12 @@ TEST_CASE("Test 4. Same as Test 3 but with good variable ordering from")
 
 	check_expected(F, expected);
 
+	cout << setw(20) << "txt/test04.txt  ";
+	bdd::print_stats();
 	bdd::bdd_exit();
 }
 
-TEST_CASE("Test 5. Constant false")
+TEST_CASE("txt/test05.txt Constant false")
 {
 	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test05.txt");
 
@@ -123,10 +131,12 @@ TEST_CASE("Test 5. Constant false")
 
 	CHECK(F == bdd::bdd_zero);
 
+	cout << setw(20) << "txt/test05.txt  ";
+	bdd::print_stats();
 	bdd::bdd_exit();
 }
 
-TEST_CASE("Test 6. Constant true")
+TEST_CASE("txt/test06.txt Constant true")
 {
 	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test06.txt");
 
@@ -134,10 +144,12 @@ TEST_CASE("Test 6. Constant true")
 
 	CHECK(F == bdd::bdd_one);
 
+	cout << setw(20) << "txt/test06.txt  ";
+	bdd::print_stats();
 	bdd::bdd_exit();
 }
 
-TEST_CASE("Test 7. All operators")
+TEST_CASE("txt/test07.txt All operators")
 {
 	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test07.txt");
 
@@ -155,10 +167,12 @@ TEST_CASE("Test 7. All operators")
 
 	check_expected(F, expected);
 
+	cout << setw(20) << "txt/test07.txt  ";
+	bdd::print_stats();
 	bdd::bdd_exit();
 }
 
-TEST_CASE("Test 8. Test implication associativity")
+TEST_CASE("txt/text08.txt Test implication associativity")
 {
 	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test08.txt");
 
@@ -172,10 +186,12 @@ TEST_CASE("Test 8. Test implication associativity")
 
 	check_expected(F, expected);
 
+	cout << setw(20) << "txt/test08.txt  ";
+	bdd::print_stats();
 	bdd::bdd_exit();
 }
 
-TEST_CASE("Test 9. Test constants in expressions")
+TEST_CASE("txt/test09.txt Test constants in expressions")
 {
 	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test09.txt");
 
@@ -188,9 +204,23 @@ TEST_CASE("Test 9. Test constants in expressions")
 
 	check_expected(F, expected);
 
+	cout << setw(20) << "txt/test09.txt  ";
+	bdd::print_stats();
 	bdd::bdd_exit();
 }
 
+
+TEST_CASE("txt/test10.txt Check time for bad variable ordering")
+{
+	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test10.txt");
+
+	REQUIRE(F.empty() != true);
+
+
+	cout << setw(20) << "txt/test10.txt  ";
+	bdd::print_stats();
+	bdd::bdd_exit();
+}
 
 
 

@@ -5,12 +5,16 @@
 
 using namespace std;
 
-bdd bdd::bdd_one;
-bdd bdd::bdd_zero;
-hash_table bdd::unique_table;
+
+/* Static variables */
 uint32_t bdd::num_var;
 unordered_map<uint32_t, string>* bdd::map_var;
+bdd bdd::bdd_one;
+bdd bdd::bdd_zero;
 
+unique_table* bdd::unique_tb;
+
+bdd_stats bdd::stats;
 
 bdd::bdd()
 {
@@ -20,7 +24,7 @@ bdd::bdd()
 /* Simple node creation for a variable with children to 0 and 1 */
 bdd::bdd(uint32_t index)
 {
-	this->root = unique_table.find_or_add_unique(index, bdd_zero.root, bdd_one.root);
+	this->root = unique_tb->find_or_add_unique(index, bdd_zero.root, bdd_one.root);
 }
 
 bdd_node* bdd::get_root()
@@ -66,10 +70,16 @@ bool bdd::empty()
 
 void bdd::bdd_init(uint32_t num_var, unordered_map<string, uint32_t>& var_order)
 {
-	bdd_zero.root = unique_table.find_or_add_unique(num_var,     nullptr, nullptr);
-	bdd_one.root  = unique_table.find_or_add_unique(num_var + 1, nullptr, nullptr);
+	bdd::reset_stats();
 
-	map_var = new unordered_map<uint32_t, string>();
+	bdd::num_var  = num_var;
+
+	unique_tb     = new unique_table();
+	bdd_zero.root = unique_tb->find_or_add_unique(num_var,     nullptr, nullptr);
+	bdd_one.root  = unique_tb->find_or_add_unique(num_var + 1, nullptr, nullptr);
+
+	map_var      = new unordered_map<uint32_t, string>();
+
 	for (auto elem : var_order)
 	{
 		map_var->insert(pair<uint32_t, string>(elem.second, elem.first));
@@ -81,11 +91,14 @@ void bdd::bdd_init(uint32_t num_var, unordered_map<string, uint32_t>& var_order)
 
 void bdd::bdd_exit()
 {
-	unique_table.clear();
-	delete map_var;
 	num_var = 0;
 	bdd_zero.root = nullptr;
 	bdd_one.root  = nullptr;
+
+	bdd::reset_stats();
+
+	delete unique_tb;
+	delete map_var;
 }
 
 static inline uint32_t min(uint32_t a, uint32_t b)
@@ -118,18 +131,30 @@ static inline bdd_node* getFn(uint32_t v, bdd_node* F)
 bdd bdd::ite(bdd f,  bdd g, bdd h)
 {
 	bdd result;
+
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
 	result.root = ite(f.root, g.root, h.root);
+
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+	milliseconds dt = std::chrono::duration_cast<milliseconds>(end - begin);
+	bdd::stats.ite_time_total += dt;
+
 	return result;
 }
 
 bdd_node* bdd::ite(bdd_node* f, bdd_node* g, bdd_node* h)
 {
+	bdd::stats.ite_calls++;
+
 	if (f == bdd::bdd_one.root)
 	{
+		bdd::stats.ite_terminals++;
 		return g;
 	}
 	else if (f == bdd::bdd_zero.root)
 	{
+		bdd::stats.ite_terminals++;
 		return h;
 	}
 	else
@@ -159,7 +184,7 @@ bdd_node* bdd::ite(bdd_node* f, bdd_node* g, bdd_node* h)
 		/* Don't create duplicate nodes if they already exists
 		 * (keeps bdd reduced and saves space)
 		 */
-		return bdd::unique_table.find_or_add_unique(v, E, T);
+		return bdd::unique_tb->find_or_add_unique(v, E, T);
 	}
 
 

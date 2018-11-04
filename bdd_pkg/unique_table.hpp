@@ -2,8 +2,8 @@
 #include <unordered_map>
 #include <bdd_node.hpp>
 
-#ifndef BDD_PKG_HASH_TABLE_HPP_
-#define BDD_PKG_HASH_TABLE_HPP_
+#ifndef BDD_PKG_unique_table_HPP_
+#define BDD_PKG_unique_table_HPP_
 
 using namespace std;
 /*
@@ -14,7 +14,11 @@ using namespace std;
  *       F    - a function i.e a pointer to a BDD node in memory
  *       		with the (v, low, high) values
  */
-class hash_table
+/*
+ * Note that hash table may contain a lot of dead nodes
+ * TBD Garbage collection
+ */
+class unique_table
 {
 	struct table_key
 	{
@@ -39,6 +43,7 @@ class hash_table
 	unordered_map<const table_key, bdd_node*, table_hash> table;
 
 public:
+
 	bdd_node* find_or_add_unique(uint32_t v, bdd_node* low, bdd_node* high)
 	{
 		table_key key{v, low, high};
@@ -59,16 +64,12 @@ public:
 		}
 	}
 
-	void clear()
+	uint32_t get_size()
 	{
-		for ( auto it = table.begin(); it != table.end(); ++it )
-		{
-			delete it->second;
-		}
-		table.clear();
+		return table.size();
 	}
 
 };
 
 
-#endif /* BDD_PKG_HASH_TABLE_HPP_ */
+#endif /* BDD_PKG_unique_table_HPP_ */

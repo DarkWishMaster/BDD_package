@@ -6,10 +6,20 @@
 #include <cstdint>
 #include <unordered_map>
 #include <bdd_node.hpp>
-#include <hash_table.hpp>
+#include <unique_table.hpp>
 #include <unordered_set>
+#include <chrono>
 
 using namespace std;
+
+using milliseconds = std::chrono::duration<float, std::ratio<1, 1000>> ;
+
+typedef struct bdd_stats_s
+{
+	uint32_t     ite_calls;
+	uint32_t     ite_terminals;
+	milliseconds ite_time_total;
+} bdd_stats;
 
 
 class bdd
@@ -18,7 +28,7 @@ class bdd
 private:
 	bdd_node* root;
 
-	static hash_table unique_table;
+	static unique_table* unique_tb;
 	static uint32_t num_var;
 	static unordered_map<uint32_t, string>* map_var;
 
@@ -70,7 +80,28 @@ private:
 	static bdd_node* ite(bdd_node* f,  bdd_node* g, bdd_node* h);
 
 
+
+
+private:
+	static bdd_stats stats;
+
+	static void reset_stats()
+	{
+		stats.ite_calls      = 0;
+		stats.ite_terminals  = 0;
+		stats.ite_time_total = milliseconds(0);
+	}
+
+public:
+	static void print_stats()
+	{
+		cout << "Vars: " << setw(4) << num_var << "  ";
+		cout << "ITE:  " << setw(6) << stats.ite_calls << "  ";
+		cout << setw(7) << stats.ite_terminals << "  ";
+		cout << setw(6) << stats.ite_time_total.count() << " ms" << endl;
+	}
 };
+
 
 inline bool operator==(const bdd& f, const bdd& g)
 {
