@@ -232,8 +232,6 @@ bdd bdd::bdd_eq(bdd f, bdd g)
 }
 
 
-
-
 bdd& bdd::operator=(const bdd& g)
 {
 	this->root = g.root;

@@ -4,12 +4,9 @@
 #include <bdd.hpp>
 #include <timer.hpp>
 
-// TBD check number of satisfying assignments and their vector
-// TBD test_node pure 0 or pure 1 (no edges)
-
 TEST_CASE("txt/test01.txt Simple expression")
 {
-	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test01.txt");
+	bdd F = bdd_from_txt("..\\test_data\\txt\\test01.txt");
 
 	REQUIRE(F.empty() != true);
 
@@ -29,7 +26,7 @@ TEST_CASE("txt/test01.txt Simple expression")
 
 TEST_CASE("txt/test02.txt Complex expression")
 {
-	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test02.txt");
+	bdd F = bdd_from_txt("..\\test_data\\txt\\test02.txt");
 
 	REQUIRE(F.empty() != true);
 
@@ -56,7 +53,7 @@ TEST_CASE("txt/test02.txt Complex expression")
 
 TEST_CASE("txt/test03.txt Bad variable ordering from")
 {
-	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test03.txt");
+	bdd F = bdd_from_txt("..\\test_data\\txt\\test03.txt");
 
 	REQUIRE(F.empty() != true);
 
@@ -102,7 +99,7 @@ TEST_CASE("txt/test03.txt Bad variable ordering from")
 
 TEST_CASE("txt/test04.txt Same as Test 3 but with good variable ordering from")
 {
-	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test04.txt");
+	bdd F = bdd_from_txt("..\\test_data\\txt\\test04.txt");
 
 	REQUIRE(F.empty() != true);
 
@@ -125,7 +122,7 @@ TEST_CASE("txt/test04.txt Same as Test 3 but with good variable ordering from")
 
 TEST_CASE("txt/test05.txt Constant false")
 {
-	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test05.txt");
+	bdd F = bdd_from_txt("..\\test_data\\txt\\test05.txt");
 
 	REQUIRE(F.empty() != true);
 
@@ -138,7 +135,7 @@ TEST_CASE("txt/test05.txt Constant false")
 
 TEST_CASE("txt/test06.txt Constant true")
 {
-	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test06.txt");
+	bdd F = bdd_from_txt("..\\test_data\\txt\\test06.txt");
 
 	REQUIRE(F.empty() != true);
 
@@ -151,7 +148,7 @@ TEST_CASE("txt/test06.txt Constant true")
 
 TEST_CASE("txt/test07.txt All operators")
 {
-	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test07.txt");
+	bdd F = bdd_from_txt("..\\test_data\\txt\\test07.txt");
 
 	REQUIRE(F.empty() != true);
 
@@ -174,7 +171,7 @@ TEST_CASE("txt/test07.txt All operators")
 
 TEST_CASE("txt/text08.txt Test implication associativity")
 {
-	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test08.txt");
+	bdd F = bdd_from_txt("..\\test_data\\txt\\test08.txt");
 
 	REQUIRE(F.empty() != true);
 
@@ -193,7 +190,7 @@ TEST_CASE("txt/text08.txt Test implication associativity")
 
 TEST_CASE("txt/test09.txt Test constants in expressions")
 {
-	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test09.txt");
+	bdd F = bdd_from_txt("..\\test_data\\txt\\test09.txt");
 
 	REQUIRE(F.empty() != true);
 
@@ -212,7 +209,7 @@ TEST_CASE("txt/test09.txt Test constants in expressions")
 
 TEST_CASE("txt/test10.txt Check time for bad variable ordering")
 {
-	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test10.txt");
+	bdd F = bdd_from_txt("..\\test_data\\txt\\test10.txt");
 
 	REQUIRE(F.empty() != true);
 
@@ -224,7 +221,7 @@ TEST_CASE("txt/test10.txt Check time for bad variable ordering")
 
 TEST_CASE("txt/test11.txt Check time for bad variable ordering")
 {
-	bdd F = bdd_from_txt("G:\\Workspace\\Eclipse\\BDD_package\\test_data\\txt\\test11.txt");
+	bdd F = bdd_from_txt("..\\test_data\\txt\\test11.txt");
 
 	REQUIRE(F.empty() != true);
 
